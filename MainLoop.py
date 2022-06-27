@@ -14,7 +14,7 @@ import PreInformationpage
 import PreStudypage
 import Studypage
 
-
+l = []
 class App(ttk.Frame):
     def __init__(self, parent):
         ttk.Frame.__init__(self)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     # Setting up GUI
     root = tk.Tk()
     root.resizable(False, False) # Prevent resizing of window
-    root.title("STimer")  # Window Title
+    root.title("Student Timer")  # Window Title
     root.tk.call("source", "azure.tcl")  # Add the azure theme for dark/light modes
     root.tk.call("set_theme", "dark")  # set as dark mode
     root.geometry('724x476')  # Window size
