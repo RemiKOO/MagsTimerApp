@@ -5,8 +5,6 @@ from tkinter import ttk
 
 # Homepage Class
 class homepage:
-
-
     def create(self):
         # Calling Image function with a list of images for this page specifically
         self.imgList = self.make_images(["nac", "dc", 'hsw', 'hg', 'sw', 'ac'])
