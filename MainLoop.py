@@ -14,7 +14,6 @@ import PreInformationpage
 import PreStudypage
 import Studypage
 
-l = []
 class App(ttk.Frame):
     def __init__(self, parent):
         ttk.Frame.__init__(self)
@@ -27,12 +26,16 @@ class App(ttk.Frame):
             PreStudypage.pre_study_page,
             Informationpage.information_page]
         # Displays Home Page (Index 0 of list) at start up
+        self.columnconfigure(index=0,weight=1)
+        self.columnconfigure(index=1,weight=1)
+        self.columnconfigure(index=2,weight=1)
         self.availablePages[0].create(self)
 
     # The Function used to change between pages
     def change_page(self, nmbr):
         try:
             self.wantedtime = datetime.datetime.now()
+            self.breaktime = datetime.datetime.now()
         except:
             print("T1 not open")
         # Remove all previous widgets
@@ -54,24 +57,50 @@ class App(ttk.Frame):
 
     def submit(self):
         self.timerseconds = int(self.studyminuteinput.get()) * 60
+        self.breaktimerseconds = int(self.breakminuteinput.get()) * 60
         self.change_page(1)
 
     def study_timer(self):
         self.wantedtime = datetime.datetime.now() + datetime.timedelta(0, int(self.timerseconds))
-
         def timer():
             while True:
                 self.timer = float(time.mktime(self.wantedtime.timetuple()) - time.mktime(datetime.datetime.now().timetuple()))
                 self.timerS = self.timer%60
                 self.timerM = (self.timer-self.timerS) / 60
-                print(self.timerM, self.timerS)
-                self.counterVar.set(str(int(self.timerM)) + ":" + str(int(self.timerS)))
-                if datetime.datetime.now() > self.wantedtime:
-                    print("done")
-                    break
+                print("Study timer - ",self.timerM, self.timerS)
+                
+                
+                if(int(self.timerM) < 10):
+                    self.timerMStr = "0" + str(int(self.timerM))
+                else:
+                    self.timerMStr = str(int(self.timerM))
+           
+                if(int(self.timerS) < 10):
+                    self.timerSStr = "0" + str(int(self.timerS))
+                else:
+                    self.timerSStr = str(int(self.timerS))
 
+                self.counterVar.set(self.timerMStr + " : " + self.timerSStr)
+                if datetime.datetime.now() > self.wantedtime:
+                    self.change_page(2)
+                    break
         self.t1 = Thread(target=timer)
         self.t1.start()
+    
+    def break_timer(self):
+        self.breaktime = datetime.datetime.now() + datetime.timedelta(0, int(self.breaktimerseconds))
+        def breaktimer():
+            while True:
+                self.breaktimer = float(time.mktime(self.breaktime.timetuple()) - time.mktime(datetime.datetime.now().timetuple()))
+                self.breaktimerS = self.breaktimer%60
+                self.breaktimerM = (self.breaktimer - self.breaktimerS) / 60
+                print("Break timer - ",self.breaktimerM, self.breaktimerS)
+                self.breakcounterVar.set(str(int(self.breaktimerM)) + ":" + str(int(self.breaktimerS)))
+                if datetime.datetime.now() > self.breaktime:
+                    self.change_page(4)
+                    break
+        self.t2 = Thread(target=breaktimer)
+        self.t2.start()
 
 
 # Function for Light/Dark Mode Switch + Theme change
