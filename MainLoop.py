@@ -57,9 +57,14 @@ class App(ttk.Frame):
         return self.imgtemp
 
     def submit(self):
-        self.timerseconds = int(self.studyminuteinput.get()) * 60
-        self.breaktimerseconds = int(self.breakminuteinput.get()) * 60
-        self.change_page(1)
+        try:
+            self.timerseconds = int(self.studyminuteinput.get()) * 60
+            self.breaktimerseconds = int(self.breakminuteinput.get()) * 60
+            if self.timerseconds <= 0 or self.breaktimerseconds <= 0:
+                raise ValueError("Negative timer")
+            self.change_page(1)
+        except ValueError:
+            print("Please enter a whole positive number")
 
     def study_timer(self):
         self.wantedtime = datetime.datetime.now() + datetime.timedelta(0,
@@ -104,8 +109,17 @@ class App(ttk.Frame):
                 self.breaktimerS = self.breaktimer % 60
                 self.breaktimerM = (self.breaktimer - self.breaktimerS) / 60
                 print("Break timer - ", self.breaktimerM, self.breaktimerS)
+                if(int(self.breaktimerM) < 10):
+                    self.breaktimerMStr = "0" + str(int(self.breaktimerM))
+                else:
+                    self.breaktimerMStr = str(int(self.breaktimerM))
+
+                if(int(self.breaktimerS) < 10):
+                    self.breaktimerSStr = "0" + str(int(self.breaktimerS))
+                else:
+                    self.breaktimerSStr = str(int(self.breaktimerS))
                 self.breakcounterVar.set(
-                    str(int(self.breaktimerM)) + ":" + str(int(self.breaktimerS)))
+                    self.breaktimerMStr+ ":" + self.breaktimerSStr)
                 if self.exit_break_timer == False:
                     if datetime.datetime.now() > self.wantedtime:
                         self.change_page(2)
