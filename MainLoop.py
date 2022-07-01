@@ -4,7 +4,9 @@ from PIL import ImageTk, Image
 from threading import Thread
 import datetime
 import time
-
+import os
+from tkinter.messagebox import showerror, showwarning
+import matplotlib.pyplot as plt
 
 # importing files
 import HomePage
@@ -58,18 +60,55 @@ class App(ttk.Frame):
 
     def submit(self):
         try:
+            self.name = self.nameinput.get()
             self.timerseconds = int(self.studyminuteinput.get()) * 60
             self.breaktimerseconds = int(self.breakminuteinput.get()) * 60
             if self.timerseconds <= 0 or self.breaktimerseconds <= 0:
                 raise ValueError("Negative timer")
+            if self.name == '':
+                raise NameError("Invalid Name")
+            for letters in self.name:
+                if letters.isdigit():
+                    raise NameError("Letters Only")
             self.change_page(1)
         except ValueError:
-            print("Please enter a whole positive number")
+            showwarning(title="Warning", message="Please enter a WHOLE & POSITIVE Time Value")
+        except NameError:
+            showwarning(title="Warning", message="Please Enter a NAME using LETTERS only")
+
+    def enterdata(self, timeStudied):
+        self.file = open('data.txt', 'a')
+        self.file.write(self.name + ':' + str(timeStudied) + '\n')
+        self.file.close()
+
+    
+    def studygraph(self,data):
+        self.studysession = []
+        for i in range(len(self.datalist)):
+            self.studysession.append("Study #" + str(i+1))
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        plt.ylabel("Seconds of Study")
+        plt.title("Amount of Time Studied per Session")
+        ax.bar(self.studysession, data)
+        plt.xticks(fontsize=8)
+        ax.set_xticklabels(self.studysession, rotation=45)        
+        fig.savefig("./img/graph.png")
+
+    def getdata(self, username):
+        self.file = open('data.txt', 'r')
+        self.datalist = []
+        for line in self.file:
+            line= line.replace('\n', '')
+            if username in line:
+                self.datalist.append(int(line.split(':')[1]))
+        self.file.close()
+        print("Successfull", self.datalist)
+        self.studygraph(self.datalist)
+        self.change_page(5)
 
     def study_timer(self):
-        self.wantedtime = datetime.datetime.now() + datetime.timedelta(0,
-                                                                       int(self.timerseconds))
-
+        self.wantedtime = datetime.datetime.now() + datetime.timedelta(0,int(self.timerseconds))
         def timer():
             while True:
                 self.timer = float(time.mktime(self.wantedtime.timetuple(
@@ -91,6 +130,7 @@ class App(ttk.Frame):
                 self.counterVar.set(self.timerMStr + " : " + self.timerSStr)
                 if self.exit_study_timer == False:
                     if datetime.datetime.now() > self.wantedtime:
+                        self.enterdata(self.timerseconds)
                         self.change_page(2)
                         break
                 elif self.exit_study_timer == True:
@@ -101,7 +141,6 @@ class App(ttk.Frame):
     def break_timer(self):
         self.breaktime = datetime.datetime.now() + datetime.timedelta(0,
                                                                       int(self.breaktimerseconds))
-
         def breaktimer():
             while True:
                 self.breaktimer = float(time.mktime(
@@ -121,8 +160,8 @@ class App(ttk.Frame):
                 self.breakcounterVar.set(
                     self.breaktimerMStr+ ":" + self.breaktimerSStr)
                 if self.exit_break_timer == False:
-                    if datetime.datetime.now() > self.wantedtime:
-                        self.change_page(2)
+                    if datetime.datetime.now() > self.breaktime:
+                        self.change_page(4)
                         break
                 elif self.exit_break_timer == True:
                     break
@@ -147,6 +186,9 @@ def switch_upd():
 
 is_darkTheme = True  # Setting initial theme of GUI
 if __name__ == "__main__":
+    if not os.path.exists("data.txt"):
+        file = open("data.txt", "w")
+        file.close()
     # Setting up GUI
     root = tk.Tk()
     root.resizable(False, False)  # Prevent resizing of window

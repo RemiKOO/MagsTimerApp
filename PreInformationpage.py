@@ -13,7 +13,7 @@ class Pre_information_page:
         self.footer.place(x=0, y=451)
         self.nameinput = ttk.Entry(self, width=13, font=("Cambria bold", 13))
         self.nameinput.place(x=227, y=185)
-        self.finduser = tk.Button(self, text="Find User", font=('Clip', 16), command=lambda: self.change_page(5))
+        self.finduser = tk.Button(self, text="Find User", font=('Clip', 16), command=lambda: self.getdata(self.nameinput.get()))
         self.finduser.place(x=377, y=185, width=130, height=36)
         self.label = ttk.Label(self, text="Enter Name", font=('Mangabey', 25))
         self.label.place(x=310, y=130)
