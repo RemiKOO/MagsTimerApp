@@ -88,10 +88,10 @@ class App(ttk.Frame):
             self.studysession.append("Study #" + str(i+1))
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        plt.ylabel("Seconds of Study")
+        plt.ylabel("Minutes of Study")
         plt.title("Amount of Time Studied per Session")
         ax.bar(self.studysession, data)
-        plt.xticks(fontsize=8)
+        plt.xticks(fontsize=7)
         ax.set_xticklabels(self.studysession, rotation=45)        
         fig.savefig("./img/graph.png")
 
@@ -101,7 +101,9 @@ class App(ttk.Frame):
         for line in self.file:
             line= line.replace('\n', '')
             if username in line:
-                self.datalist.append(int(line.split(':')[1]))
+                self.secsStudied = int(line.split(':')[1])
+                self.minsStudied = int(round(self.secsStudied/60))
+                self.datalist.append(self.minsStudied)
         self.file.close()
         print("Successfull", self.datalist)
         self.studygraph(self.datalist)

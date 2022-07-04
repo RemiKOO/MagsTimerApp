@@ -1,12 +1,12 @@
 
-1:60
-Krish:60
-Krish:20
-Krish:5
-Krish:100
-Krish:25
-Krish:45
-Krish:66
-Krish:78
-Luka:40
-Luka:60
+1:6000
+Krish:60000
+Krish:20000
+Krish:5000
+Krish:100000
+Krish:25000
+Krish:45000
+Krish:60000
+Luka:4000
+Luka:6000
+Krish:10000
