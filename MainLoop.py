@@ -7,7 +7,7 @@ import time
 import os
 from tkinter.messagebox import showerror, showwarning
 import matplotlib.pyplot as plt
-
+from string import ascii_letters, digits
 # importing files
 import HomePage
 import Breakpage
@@ -36,6 +36,7 @@ class App(ttk.Frame):
         self.columnconfigure(index=2, weight=1)
         self.availablePages[0].create(self)
 
+
     # The Function used to change between pages
     def change_page(self, nmbr):
         self.exit_study_timer = True
@@ -46,9 +47,11 @@ class App(ttk.Frame):
         # Run and create function for the new page
         self.availablePages[nmbr].create(self)
 
+
     # Function to quit the app
     def exitapp(self):
         root.quit()
+
 
     # Function to locate images
     def make_images(self, imagelocation):
@@ -58,6 +61,7 @@ class App(ttk.Frame):
                 Image.open("./img/"+i+".png")))
         return self.imgtemp
 
+
     def submit(self):
         try:
             self.name = self.nameinput.get()
@@ -65,22 +69,20 @@ class App(ttk.Frame):
             self.breaktimerseconds = int(self.breakminuteinput.get()) * 60
             if self.timerseconds <= 0 or self.breaktimerseconds <= 0:
                 raise ValueError("Negative timer")
-            if self.name == '':
-                raise NameError("Invalid Name")
-            for letters in self.name:
-                if letters.isdigit():
-                    raise NameError("Letters Only")
+            if set(self.name).difference(ascii_letters + digits):
+                raise NameError("Invalid Name, Letters only")
             self.change_page(1)
         except ValueError:
-            showwarning(title="Warning", message="Please enter a WHOLE & POSITIVE Time Value")
+            showwarning(title="Warning", message="Please enter a WHOLE & POSITIVE Time Value.")
         except NameError:
-            showwarning(title="Warning", message="Please Enter a NAME using LETTERS only")
+            showwarning(title="Warning", message="Please Enter a NAME using LETTERS only.")
+    
 
     def enterdata(self, timeStudied):
         self.file = open('data.txt', 'a')
         self.file.write(self.name + ':' + str(timeStudied) + '\n')
         self.file.close()
-
+ 
     
     def studygraph(self,data):
         self.studysession = []
@@ -95,19 +97,29 @@ class App(ttk.Frame):
         ax.set_xticklabels(self.studysession, rotation=45)        
         fig.savefig("./img/graph.png")
 
+
     def getdata(self, username):
-        self.file = open('data.txt', 'r')
-        self.datalist = []
-        for line in self.file:
-            line= line.replace('\n', '')
-            if username in line:
-                self.secsStudied = int(line.split(':')[1])
-                self.minsStudied = int(round(self.secsStudied/60))
-                self.datalist.append(self.minsStudied)
-        self.file.close()
-        print("Successfull", self.datalist)
-        self.studygraph(self.datalist)
-        self.change_page(5)
+        try:
+            if set(self.nameinput.get()).difference(ascii_letters + digits):
+                raise NameError("Invalid Name, Letters only")
+            self.datalist = []
+            self.file = open('data.txt', 'r')
+            for line in self.file:
+                line= line.replace('\n', '')
+                if username in line:
+                    self.secsStudied = int(line.split(':')[1])
+                    self.minsStudied = int(round(self.secsStudied/60))
+                    self.datalist.append(self.minsStudied)
+            self.file.close()
+            if len(self.datalist) == 0:
+                raise IndexError("Invalid User, No Data Found")
+            print("Successfull", self.datalist)
+            self.studygraph(self.datalist)
+            self.change_page(5)
+        except NameError:
+            showwarning(title="Warning", message="User Names are LETTERS only. Please Try Again.")
+        except IndexError:
+            showwarning(title="Warning", message="No User found. User Names are CASE SENSITIVE. Please Try Again.")
 
     def study_timer(self):
         self.wantedtime = datetime.datetime.now() + datetime.timedelta(0,int(self.timerseconds))
@@ -141,8 +153,7 @@ class App(ttk.Frame):
         self.t1.start()
 
     def break_timer(self):
-        self.breaktime = datetime.datetime.now() + datetime.timedelta(0,
-                                                                      int(self.breaktimerseconds))
+        self.breaktime = datetime.datetime.now() + datetime.timedelta(0, int(self.breaktimerseconds))
         def breaktimer():
             while True:
                 self.breaktimer = float(time.mktime(
@@ -204,8 +215,7 @@ if __name__ == "__main__":
     # Setting up Light/Dark Mode Switch + Text
     switch_on = tk.PhotoImage(file="./img/Switch_on.png")
     switch_off = tk.PhotoImage(file="./img/Switch_off.png")
-    night_switch = tk.Button(root, image=switch_on,
-                             relief='flat', command=lambda: switch_upd())
+    night_switch = tk.Button(root, image=switch_on, relief='flat', command=lambda: switch_upd())
     Night_Mode = ttk.Label(root, text="Night Mode:", font=('Impact', 10))
     # Placing Light/Dark Mode Switch + Text
     night_switch.place(x=238, y=448)
