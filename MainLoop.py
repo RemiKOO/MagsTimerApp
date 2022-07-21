@@ -5,7 +5,7 @@ from threading import Thread
 import datetime
 import time
 import os
-from tkinter.messagebox import showerror, showwarning
+from tkinter.messagebox import showerror, showwarning, askokcancel
 import matplotlib.pyplot as plt
 from string import ascii_letters, digits
 # importing files
@@ -76,13 +76,12 @@ class App(ttk.Frame):
             showwarning(title="Warning", message="Please enter a WHOLE & POSITIVE Time Value.")
         except NameError:
             showwarning(title="Warning", message="Please Enter a NAME using LETTERS only.")
-    
+            
 
     def enterdata(self, timeStudied):
         self.file = open('data.txt', 'a')
         self.file.write(self.name + ':' + str(timeStudied) + '\n')
         self.file.close()
- 
     
     def studygraph(self,data):
         self.studysession = []
