@@ -5,7 +5,7 @@ from threading import Thread
 import datetime
 import time
 import os
-from tkinter.messagebox import showerror, showwarning, askokcancel
+from tkinter.messagebox import showerror, showwarning
 import matplotlib.pyplot as plt
 from string import ascii_letters, digits
 # importing files
@@ -69,14 +69,13 @@ class App(ttk.Frame):
             self.breaktimerseconds = int(self.breakminuteinput.get()) * 60
             if self.timerseconds <= 0 or self.breaktimerseconds <= 0:
                 raise ValueError("Negative timer")
-            if set(self.name).difference(ascii_letters + digits):
-                raise NameError("Invalid Name, Letters only")
+            if set(self.name).difference(ascii_letters or digits):
+                raise NameError("Invalid Name")
             self.change_page(1)
         except ValueError:
             showwarning(title="Warning", message="Please enter a WHOLE & POSITIVE Time Value.")
         except NameError:
             showwarning(title="Warning", message="Please Enter a NAME using LETTERS only.")
-            
 
     def enterdata(self, timeStudied):
         self.file = open('data.txt', 'a')
@@ -95,7 +94,6 @@ class App(ttk.Frame):
         plt.xticks(fontsize=7)
         ax.set_xticklabels(self.studysession, rotation=45)        
         fig.savefig("./img/graph.png")
-
 
     def getdata(self, username):
         try:
@@ -118,7 +116,7 @@ class App(ttk.Frame):
         except NameError:
             showwarning(title="Warning", message="User Names are LETTERS only. Please Try Again.")
         except IndexError:
-            showwarning(title="Warning", message="No User found. User Names are CASE SENSITIVE. Please Try Again.")
+            showwarning(title="Warning", message="No User found, Note:CASE SENSITIVE! Please Try Again.")
 
     def study_timer(self):
         self.wantedtime = datetime.datetime.now() + datetime.timedelta(0,int(self.timerseconds))
