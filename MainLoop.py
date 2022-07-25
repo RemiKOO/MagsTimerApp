@@ -8,6 +8,8 @@ import os
 from tkinter.messagebox import showerror, showwarning
 import matplotlib.pyplot as plt
 from string import ascii_letters, digits
+from playsound import playsound #Install playsound version 1.2.2
+
 # importing files
 import HomePage
 import Breakpage
@@ -15,6 +17,10 @@ import Informationpage
 import PreInformationpage
 import PreStudypage
 import Studypage
+
+
+class LimitError(Exception):
+    pass
 
 
 class App(ttk.Frame):
@@ -69,19 +75,25 @@ class App(ttk.Frame):
             self.breaktimerseconds = int(self.breakminuteinput.get()) * 60
             if self.timerseconds <= 0 or self.breaktimerseconds <= 0:
                 raise ValueError("Negative timer")
+            if self.timerseconds >= 1000 or self.breaktimerseconds >= 1000:
+                raise LimitError("Too Large of a Timer")
             if set(self.name).difference(ascii_letters or digits):
                 raise NameError("Invalid Name")
             self.change_page(1)
         except ValueError:
             showwarning(title="Warning", message="Please enter a WHOLE & POSITIVE Time Value.")
+        except LimitError:
+            showwarning(title="Warning", message="This time value is too large. Please reduce your study duration.")
         except NameError:
             showwarning(title="Warning", message="Please Enter a NAME using LETTERS only.")
+
 
     def enterdata(self, timeStudied):
         self.file = open('data.txt', 'a')
         self.file.write(self.name + ':' + str(timeStudied) + '\n')
         self.file.close()
     
+
     def studygraph(self,data):
         self.studysession = []
         for i in range(len(self.datalist)):
@@ -94,6 +106,7 @@ class App(ttk.Frame):
         plt.xticks(fontsize=7)
         ax.set_xticklabels(self.studysession, rotation=45)        
         fig.savefig("./img/graph.png")
+
 
     def getdata(self, username):
         try:
@@ -117,6 +130,7 @@ class App(ttk.Frame):
             showwarning(title="Warning", message="User Names are LETTERS only. Please Try Again.")
         except IndexError:
             showwarning(title="Warning", message="No User found, Note:CASE SENSITIVE! Please Try Again.")
+
 
     def study_timer(self):
         self.wantedtime = datetime.datetime.now() + datetime.timedelta(0,int(self.timerseconds))
@@ -143,11 +157,13 @@ class App(ttk.Frame):
                     if datetime.datetime.now() > self.wantedtime:
                         self.enterdata(self.timerseconds)
                         self.change_page(2)
+                        playsound('./alarmsound.mp3')
                         break
                 elif self.exit_study_timer == True:
                     break
         self.t1 = Thread(target=timer)
         self.t1.start()
+
 
     def break_timer(self):
         self.breaktime = datetime.datetime.now() + datetime.timedelta(0, int(self.breaktimerseconds))
@@ -172,6 +188,7 @@ class App(ttk.Frame):
                 if self.exit_break_timer == False:
                     if datetime.datetime.now() > self.breaktime:
                         self.change_page(4)
+                        playsound('./alarmsound.mp3')
                         break
                 elif self.exit_break_timer == True:
                     break

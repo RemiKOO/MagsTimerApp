@@ -1,1 +1,6 @@
-Luka:200000
+Luka:200000q:60
+LUKA:60
+Luka:60
+Luka:60
+Luka:60
+Luka:60
