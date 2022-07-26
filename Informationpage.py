@@ -6,6 +6,7 @@ from PIL import ImageTk, Image
 # Further Information Page
 class information_page:
     def create(self):
+        self.studygraph(self.datalist)
         self.image = Image.open('./img/graph.png')
         self.graphimage = self.image.resize((380, 260), Image.ANTIALIAS)
         self.photo = ImageTk.PhotoImage(self.graphimage)

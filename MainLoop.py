@@ -27,6 +27,7 @@ class App(ttk.Frame):
     def __init__(self, parent):
         self.exit_study_timer = False
         self.exit_break_timer = False
+        self.currentpage = 0
         ttk.Frame.__init__(self)
         # All files/pages formed into a list
         self.availablePages = [
@@ -47,6 +48,7 @@ class App(ttk.Frame):
     def change_page(self, nmbr):
         self.exit_study_timer = True
         self.exit_break_timer = True
+        self.currentpage = nmbr
         # Remove all previous widgets
         for widget in self.winfo_children():
             widget.destroy()
@@ -98,14 +100,29 @@ class App(ttk.Frame):
         self.studysession = []
         for i in range(len(self.datalist)):
             self.studysession.append("Study #" + str(i+1))
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        plt.ylabel("Minutes of Study")
-        plt.title("Amount of Time Studied per Session")
-        ax.bar(self.studysession, data)
-        plt.xticks(fontsize=7)
-        ax.set_xticklabels(self.studysession, rotation=45)        
-        fig.savefig("./img/graph.png")
+        if is_darkTheme:
+            fig = plt.figure(facecolor='#333333')
+            ax = fig.add_subplot(111)
+            plt.ylabel("Minutes of Study", color='white')
+            plt.title("Amount of Time Studied per Session", color='white')
+            ax.bar(self.studysession, data, color='white')
+            ax.set_facecolor("#333333")
+            ax.tick_params(axis='x', colors='#FFFFFF')
+            ax.tick_params(axis='y', colors='#FFFFFF')
+            for i in ['top', 'bottom', 'left', 'right']:
+                ax.spines[i].set_color('#FFFFFF')
+            plt.xticks(fontsize=7)
+            ax.set_xticklabels(self.studysession, rotation=45, color='white')    
+            fig.savefig("./img/graph.png")
+        else:    
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            plt.ylabel("Minutes of Study")
+            plt.title("Amount of Time Studied per Session")
+            ax.bar(self.studysession, data, color='grey')
+            plt.xticks(fontsize=7)
+            ax.set_xticklabels(self.studysession, rotation=45)        
+            fig.savefig("./img/graph.png")
 
 
     def getdata(self, username):
@@ -124,7 +141,7 @@ class App(ttk.Frame):
             if len(self.datalist) == 0:
                 raise IndexError("Invalid User, No Data Found")
             print("Successfull", self.datalist)
-            self.studygraph(self.datalist)
+            
             self.change_page(5)
         except NameError:
             showwarning(title="Warning", message="User Names are LETTERS only. Please Try Again.")
@@ -198,7 +215,7 @@ class App(ttk.Frame):
 
 # Function for Light/Dark Mode Switch + Theme change
 def switch_upd():
-    global is_darkTheme
+    global is_darkTheme, app
     if is_darkTheme:
         root.tk.call("set_theme", "light")  # make it light mode
         is_darkTheme = not is_darkTheme
@@ -209,6 +226,7 @@ def switch_upd():
         is_darkTheme = not is_darkTheme
         # Change Image to Green Switch
         night_switch.config(image=switch_on, activebackground='gray')
+    app.change_page(app.currentpage)
 
 
 is_darkTheme = True  # Setting initial theme of GUI

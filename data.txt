@@ -1,4 +1,5 @@
-Luka:200000q:60
+Luka:200000
+q:60
 LUKA:60
 Luka:60
 Luka:60
