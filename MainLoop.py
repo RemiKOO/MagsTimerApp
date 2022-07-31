@@ -77,7 +77,7 @@ class App(ttk.Frame):
             self.breaktimerseconds = int(self.breakminuteinput.get()) * 60
             if self.timerseconds <= 0 or self.breaktimerseconds <= 0:
                 raise ValueError("Negative timer")
-            if self.timerseconds >= 1000 or self.breaktimerseconds >= 1000:
+            if self.timerseconds >= 60000 or self.breaktimerseconds >= 60000:
                 raise LimitError("Too Large of a Timer")
             if set(self.name).difference(ascii_letters or digits):
                 raise NameError("Invalid Name")
@@ -226,7 +226,10 @@ def switch_upd():
         is_darkTheme = not is_darkTheme
         # Change Image to Green Switch
         night_switch.config(image=switch_on, activebackground='gray')
-    app.change_page(app.currentpage)
+    if app.currentpage == 5:
+        app.change_page(app.currentpage)
+    else:
+        pass
 
 
 is_darkTheme = True  # Setting initial theme of GUI

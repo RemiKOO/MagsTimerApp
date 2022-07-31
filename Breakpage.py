@@ -13,8 +13,8 @@ class break_page:
         # Calling Image function with a list of images for this page specifically
         self.imgList = self.make_images(
             ['brk1', 'brk2', 'brk3', 'brk4', 'brk5', 'brk6', 'brk7', 'brk8', 'brk9'])
-        top_left_lbl = Label(self, image=random.choice(self.imgList))
-        top_left_lbl.place(x=222, y=103)
+        breakimage = Label(self, image=random.choice(self.imgList))
+        breakimage.place(x=222, y=103)
         # Creating Labels for Break Page
         self.title = ttk.Label(self, text="  Break Time  ",
                                font=('Mangabey', 50, 'underline'))
@@ -23,7 +23,7 @@ class break_page:
         # Placing Labels
         self.footer.place(x=0, y=451)
         self.title.place(x=222, y=0)
-        
+        # Creating a Frame with columns for the break timer
         self.breakFrame = ttk.Frame(self)
         self.breakFrame.place(x=105,y=280)
         self.breakFrame.columnconfigure(index=0,weight=1)

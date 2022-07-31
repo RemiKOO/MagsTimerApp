@@ -8,19 +8,20 @@ class homepage:
     def create(self):
         # Calling Image function with a list of images for this page specifically
         self.imgList = self.make_images(["nac", "dc", 'hsw', 'hg', 'sw', 'ac'])
-        # Setting images as labels and placing.
-        self.top_left_lbl = Label(self, image=self.imgList[0])
-        self.top_left_lbl.place(x=25, y=10)
-        self.mid_left_lbl = Label(self, image=self.imgList[1])
-        self.mid_left_lbl.place(x=5, y=160)
-        self.botm_left_lbl = Label(self, image=self.imgList[2])
-        self.botm_left_lbl.place(x=25, y=310)
-        self.top_right_lbl = Label(self, image=self.imgList[3])
-        self.top_right_lbl.place(x=560, y=0)
-        self.botm_right_lbl = Label(self, image=self.imgList[4])
-        self.botm_right_lbl.place(x=600, y=325)
-        self.mid_right_lbl = Label(self, image=self.imgList[5])
-        self.mid_right_lbl.place(x=565, y=185)
+        # Setting specific images as labels and respective variables.
+        self.top_left_img = Label(self, image=self.imgList[0])
+        self.mid_left_img = Label(self, image=self.imgList[1])
+        self.botm_left_img = Label(self, image=self.imgList[2])
+        self.top_right_img = Label(self, image=self.imgList[3])
+        self.botm_right_img = Label(self, image=self.imgList[4])
+        self.mid_right_img = Label(self, image=self.imgList[5])
+        # Placing specific Images in specific their respective positions
+        self.top_left_img.place(x=25, y=10)
+        self.mid_left_img.place(x=5, y=160)
+        self.botm_left_img.place(x=25, y=310)
+        self.top_right_img.place(x=560, y=0)
+        self.botm_right_img.place(x=600, y=325)
+        self.mid_right_img.place(x=565, y=185)
         # All Texts of homepage as labels
         self.Title = ttk.Label(self, text="STimer", font=("LostWages", 60))
         self.SUBTitle = ttk.Label(self, text="    Modernised Study Time Management   ",
