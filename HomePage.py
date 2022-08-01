@@ -42,7 +42,7 @@ class homepage:
 
         self.buttonBegin = tk.Button(self, text="Start", font=("Clip", 35), command=lambda: self.submit())
         self.buttonInfo = tk.Button(self, text="Information", font=("Clip", 22), command=lambda: self.change_page(3))
-        self.Exit = tk.Button(self, text="Exit App", font=("Clip", 22), command=lambda: self.exitapp())
+        self.Exit = tk.Button(self, text="Exit App", font=("Clip", 22), command=lambda: self.exit_app())
         # Placing Buttons
         self.buttonBegin.place(x=275, y=310, width=200, height=55)
         self.buttonInfo.place(x=395, y=385, width=170, height=50)

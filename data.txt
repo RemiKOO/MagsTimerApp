@@ -10,3 +10,4 @@ luka:120
 Debbie:60
 Debbie:120
 gabryel:60
+Luka:60
