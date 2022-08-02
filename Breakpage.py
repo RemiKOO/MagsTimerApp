@@ -1,21 +1,25 @@
+# Libraries used by this file
 from tkinter import ttk
 import tkinter as tk
 from tkinter import *
 import random
 
 
-# Break Page
+# Class for Break Page
 class break_page:
     def create(self):
+        # Setting up variables
         self.exit_break_timer = False
         self.breakcounterVar = tk.StringVar()
         self.breakcounterVar.set("0")
-        # Calling Image function with a list of images for this page specifically
+        # Calling Image function with list of images for this page specifically
         self.imgList = self.make_images(
-            ['brk1', 'brk2', 'brk3', 'brk4', 'brk5', 'brk6', 'brk7', 'brk8', 'brk9'])
+            ['brk1', 'brk2', 'brk3', 'brk4', 'brk5',
+                'brk6', 'brk7', 'brk8', 'brk9'])
+        # Set a random image from the list to a label
         breakimage = Label(self, image=random.choice(self.imgList))
-        breakimage.place(x=222, y=103)
-        # Creating Labels for Break Page
+        breakimage.place(x=222, y=103)  # Place the label
+        # Creating Extra Labels for Break Page
         self.title = ttk.Label(self, text="  Break Time  ",
                                font=('Mangabey', 50, 'underline'))
         self.footer = ttk.Label(
@@ -23,20 +27,21 @@ class break_page:
         # Placing Labels
         self.footer.place(x=0, y=451)
         self.title.place(x=222, y=0)
-        # Creating a Frame with columns for the break timer
+        # Creating a Frame with columns for the break timer for symmetry
         self.breakFrame = ttk.Frame(self)
-        self.breakFrame.place(x=105,y=280)
-        self.breakFrame.columnconfigure(index=0,weight=1)
-        self.breakFrame.columnconfigure(index=1,weight=1)
-        self.breakFrame.columnconfigure(index=2,weight=1)
-
+        self.breakFrame.place(x=105, y=280)
+        self.breakFrame.columnconfigure(index=0, weight=1)
+        self.breakFrame.columnconfigure(index=1, weight=1)
+        self.breakFrame.columnconfigure(index=2, weight=1)
         self.countertext = ttk.Label(
-            self.breakFrame, textvariable=self.breakcounterVar, font=('Cambria Bold', 60))
-        self.countertext.grid(row=0,column=1)
+            self.breakFrame, textvariable=self.breakcounterVar,
+            font=('Cambria Bold', 60))
+        self.countertext.grid(row=0, column=1)
+        # Creating a final label
         self.studytext = ttk.Label(
             self.breakFrame, text="Until Study", font=("Cambria Bold", 22))
+        # Placing label with grid instead of (X,Y) for symmetry
         self.studytext.grid(row=1, column=1)
-
         # Creating Buttons to move from Break Page
         self.buttonStudy = tk.Button(self, text="Start Study", font=(
             "Clip", 25), command=lambda: self.change_page(4))
@@ -45,4 +50,4 @@ class break_page:
         # Placing Buttons
         self.buttonStudy.place(x=395, y=300, width=230, height=60)
         self.buttonMenu2.place(x=395, y=380, width=230, height=60)
-        self.break_timer()
+        self.break_timer()  # Run the break timer

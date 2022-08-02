@@ -1,15 +1,16 @@
+# Libraries used by this file
 from tkinter import ttk
 import tkinter as tk
-import time
 
 
-# Study/Timer Class
+# CLass for Study-Timer Page
 class study_page:
     def create(self):
+        # Setting up variables
         self.exit_study_timer = False
-        # Creating Labels for Study Page
         self.counterVar = tk.StringVar()
         self.counterVar.set("0")
+        # Creating Labels for Texts
         self.title = ttk.Label(self, text="  Study Time  ",
                                font=('Mangabey', 50, 'underline'))
         self.countertext = ttk.Label(
@@ -18,8 +19,9 @@ class study_page:
             self, text="Until Break", font=('Cambria Bold', 22))
         self.footer = ttk.Label(
             self, text="© Developed by Luka Jeremic", font=("impact", 8))
-        # Placing Labels
+        # Placing the Labels
         self.title.place(x=220, y=0)
+        # Grid is used with the timer for symmetry
         self.countertext.grid(row=1, column=1, sticky="s", pady=85)
         self.breaktext.place(x=290, y=280)
         self.footer.place(x=0, y=451)
@@ -31,4 +33,4 @@ class study_page:
         # Placing Buttons
         self.buttonMenu.place(x=120, y=340, width=230, height=60)
         self.buttonBreak.place(x=385, y=340, width=230, height=60)
-        self.study_timer()
+        self.study_timer()  # Begin the study timer
