@@ -360,9 +360,10 @@ def switch_upd():
 
 is_darkTheme = True  # Setting initial theme of GUI to Dark Mode
 if __name__ == "__main__":
+    # If the data.txt file does not already exist, create it
     if not os.path.exists("data.txt"):
-        file = open("data.txt", "w")
-        file.close()
+        file = open("data.txt", "w")  # Open a file called data.txt
+        file.close()  # Close the file
     # Setting up GUI
     root = tk.Tk()
     root.resizable(False, False)  # Prevent resizing of window
