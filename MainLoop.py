@@ -252,7 +252,7 @@ class App(ttk.Frame):
         try:
             username = self.nameinput.get()
             # If any special characters or digits are used, raise the NameError
-            if set(username).difference(ascii_letters + digits):
+            if set(username).difference(ascii_letters or digits):
                 # Raising the NameError
                 raise NameError("Invalid Name, Letters only")
             # If Username String has less than 3 characters, raise NameReqError
